@@ -19,7 +19,7 @@
         };
 
         productList();
-        searchCategoryList();
+        searchCategoriesList();
 
         function productList() {
             dataService.get("/api/Product")
@@ -30,7 +30,7 @@
                 }
             );
         }
-        function searchCategoryList() {
+        function searchCategoriesList() {
             dataService.get("/api/Category/GetSearchCategories")
                 .then(function (result) {
                     vm.searchCategories = result.data;
