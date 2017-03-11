@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\MyStuff\PluralSight-Courses\11-MVC-Angular\01-Intro\demo\PTC\Models\PTC.edmx'. 
+﻿// T4 code generation is enabled for model 'E:\Dev\_CodeAlong\The-Journey-from-MVC-to-Angular\Module01\PTC\Models\PTC.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

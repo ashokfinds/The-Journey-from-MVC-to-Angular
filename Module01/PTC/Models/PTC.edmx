@@ -9,23 +9,23 @@
           <Key>
             <PropertyRef Name="CategoryId" />
           </Key>
-          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CategoryName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="CategoryId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="CategoryName" Nullable="false" MaxLength="30" Type="nvarchar" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="ProductId" />
           </Key>
-          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProductName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ProductId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
+          <Property Name="ProductName" MaxLength="80" Type="nvarchar" />
           <Property Name="IntroductionDate" Type="datetime" />
           <Property Name="Price" Type="money" />
-          <Property Name="Url" Type="nvarchar" MaxLength="255" />
+          <Property Name="Url" MaxLength="255" Type="nvarchar" />
           <Property Name="CategoryId" Type="int" />
         </EntityType>
         <Association Name="FK_Product_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <End Type="Self.Category" Multiplicity="0..1" Role="Category" />
+          <End Type="Self.Product" Multiplicity="*" Role="Product" />
           <ReferentialConstraint>
             <Principal Role="Category">
               <PropertyRef Name="CategoryId" />
@@ -39,8 +39,8 @@
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
-            <End Role="Category" EntitySet="Category" />
-            <End Role="Product" EntitySet="Product" />
+            <End EntitySet="Category" Role="Category" />
+            <End EntitySet="Product" Role="Product" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -51,31 +51,31 @@
           <Key>
             <PropertyRef Name="CategoryId" />
           </Key>
-          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CategoryName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryId" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="CategoryName" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" Type="String" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Product_Category" FromRole="Category" ToRole="Product" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="ProductId" />
           </Key>
-          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <Property Name="IntroductionDate" Type="DateTime" Precision="3" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ProductId" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="ProductName" MaxLength="80" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="IntroductionDate" Precision="3" Type="DateTime" />
+          <Property Name="Price" Precision="19" Scale="4" Type="Decimal" />
+          <Property Name="Url" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
         </EntityType>
         <Association Name="FK_Product_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <End Type="Self.Category" Multiplicity="0..1" Role="Category" />
+          <End Type="Self.Product" Multiplicity="*" Role="Product" />
         </Association>
         <EntityContainer Name="PTCEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="Product" EntitySet="Products" />
+            <End EntitySet="Categories" Role="Category" />
+            <End EntitySet="Products" Role="Product" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -110,7 +110,7 @@
             <EndProperty Name="Product">
               <ScalarProperty Name="ProductId" ColumnName="ProductId" />
             </EndProperty>
-            <Condition IsNull="false" ColumnName="CategoryId" />
+            <Condition ColumnName="CategoryId" IsNull="false" />
           </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
