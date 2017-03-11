@@ -81,17 +81,28 @@
                 productDelete(id);
             }
         }
-        function saveClick() {
-            if (productValidate()) {
-                if (vm.uiState.mode === pageMode.ADD) {
-                    productAdd();
+        function saveClick(productForm) {
+            if (productForm.$valid) {
+                if (productValidate()) {
+                    productForm.$setPristine();
+                    if (vm.uiState.mode === pageMode.ADD) {
+                        productAdd();
+                    }
+                    if (vm.uiState.mode === pageMode.EDIT) {
+                        productUpdate();
+                    }
+                } else {
+                    productForm.$valid = false;
                 }
-                if (vm.uiState.mode === pageMode.EDIT) {
-                    productUpdate();
-                }                
+            } else {
+                vm.uiState.isValid = false;
             }
+
         }
-        function cancelClick() {
+        function cancelClick(productForm) {
+            productForm.$setPristine();
+            productForm.$valid = true;
+            vm.uiState.isValid = true;
             setUiState(pageMode.LIST);
         }
 
@@ -158,14 +169,33 @@
                 }
             );
         }
-        function productValidate() {
-            var ret = true;
-
+        function productValidate() {           
             // IE11 workaround
             vm.product.IntroductionDate =
                 vm.product.IntroductionDate.replace(/\u200E/g, '');
 
-            return ret;
+
+            vm.uiState.messages = [];
+
+            // Validation
+            if (vm.product.IntroductionDate !== null) {
+                if (isNaN(Date.parse(vm.product.IntroductionDate))) {
+                    addValidationMessage('IntroductionDate', 'Invalid Introduction Date');
+                }
+            }
+            if (vm.product.Url.toLowerCase().indexOf('microsoft') >= 0) {
+                addValidationMessage('Url', 'URL cannot contain the words "microsoft".');
+            }
+
+            vm.uiState.isValid = vm.uiState.messages.length === 0;
+
+            return vm.uiState.isValid;
+        }
+        function addValidationMessage(property, message) {
+            vm.uiState.messages.push({
+                property: property,
+                message: message
+            });
         }
         function categoriesList() {
             dataService.get("/api/Category/")
