@@ -1,0 +1,211 @@
+﻿@model PTCViewModel
+
+@{
+  ViewBag.Title = "Paul's Training Company";
+}
+
+@using (Html.BeginForm()) {
+    <!-- ** BEGIN ng-app **-->
+    <div ng-app="app" 
+         ng-controller="ProductController as vm">
+        <span>{{vm.product.productName}}</span>
+        <!-- ** BEGIN HIDDEN FIELDS AREA ** -->
+        @Html.HiddenFor(m => m.EventCommand)
+        @Html.HiddenFor(m => m.EventArgument)
+        @Html.HiddenFor(m => m.PageMode)
+        @Html.HiddenFor(m => m.Entity.ProductId)
+        <!-- ** END HIDDEN FIELDS AREA ** -->
+        @if (!Model.IsValid)
+        {
+        <!-- ** BEGIN MESSAGE AREA ** -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-danger
+                    alert-dismissable"
+                     role="alert">
+                    <button type="button" class="close"
+                            data-dismiss="alert">
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    @Html.ValidationSummary(false)
+                </div>
+            </div>
+        </div>
+        <!-- ** END MESSAGE AREA ** -->
+        }
+
+        @if (Model.IsSearchAreaVisible) {
+        <!-- ** BEGIN SEARCH AREA ** -->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">Search for Products</h1>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SearchEntity.CategoryId,
+                         "Select a Product Category")
+                    @Html.DropDownListFor(m => m.SearchEntity.CategoryId,
+                                new SelectList(Model.SearchCategories,
+                                                "CategoryId",
+                                                "CategoryName"),
+                               new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SearchEntity.ProductName, "Product Name")
+                    @Html.TextBoxFor(m => m.SearchEntity.ProductName, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-primary"
+                        data-pdsa-action="search">
+                    <i class="glyphicon glyphicon-search"></i>
+                    &nbsp;Search
+                </button>
+                <button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-primary"
+                        data-pdsa-action="resetsearch">
+                    <i class="glyphicon glyphicon-share-alt"></i>
+                    &nbsp;Reset
+                </button>
+                <button formnovalidate="formnovalidate"
+                        class="btn btn-sm btn-success"
+                        data-pdsa-action="add">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    &nbsp;Add
+                </button>
+            </div>
+        </div>
+        <!-- ** END SEARCH AREA ** -->
+        }
+
+        @if (Model.IsDetailAreaVisible) {
+        <!-- ** BEGIN DETAIL AREA ** -->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    Product Information
+                </h1>
+            </div>
+            <div class="panel-body">
+                <!-- ** BEGIN INPUT AREA -->
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.Category.CategoryId, "Product Category")
+                    @Html.DropDownListFor(m => m.Entity.Category.CategoryId, new SelectList(Model.Categories, "CategoryId", "CategoryName"), new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.ProductName, "Product Name")
+                    @Html.TextBoxFor(m => m.Entity.ProductName, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.IntroductionDate, "Introduction Date")
+                    @Html.TextBoxFor(m => m.Entity.IntroductionDate, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.Url, "Url")
+                    @Html.TextBoxFor(m => m.Entity.Url, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.Price, "Price")
+                    @Html.TextBoxFor(m => m.Entity.Price, new { @class = "form-control" })
+                </div>
+                <!-- ** END INPUT AREA -->
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button class="btn btn-sm btn-primary"
+                                data-pdsa-action="save">
+                            <i class="glyphicon glyphicon-floppy-disk"></i>
+                            &nbsp;Save
+                        </button>
+                        <button class="btn btn-sm btn-primary"
+                                formnovalidate="formnovalidate"
+                                data-pdsa-action="cancel">
+                            <i class="glyphicon glyphicon-remove-circle"></i>
+                            &nbsp;Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ** END DETAIL AREA ** -->
+        }
+
+        @if (Model.IsListAreaVisible) {
+        <!-- ** BEGIN LIST AREA ** -->
+        <div class="table-responsive">
+            <table id="productTable"
+                   class="table table-condensed table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="pdsa-action-button-column">
+                            Edit
+                        </th>
+                        <th>Product Name</th>
+                        <th>Introduction Date</th>
+                        <th>Url</th>
+                        <th>Price</th>
+                        <th class="pdsa-action-button-column">
+                            Delete
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>                    
+                    <tr ng-repeat="product in vm.products">
+                        <td class="pdsa-action-button-column">
+                            <a href="#"
+                               class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        </td>
+                        <td>{{product.ProductName}}</td>
+                        <td>{{product.IntroductionDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{product.Url}}</td>
+                        <td>{{product.Price | currency: "€"}}</td>
+                        <td class="pdsa-action-button-column">
+                            <a href="#"
+                               onclick="return confirm('Delete this Product?');"
+                               class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ** END LIST AREA ** -->
+        }
+    </div>
+    <!-- ** END ng-app **-->
+}
+
+@section scripts {  
+  <script src="~/app/app.module.js"></script>
+  <script src="~/app/product.controller.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Hook events on buttons and anchors
+      buildClickEvents();
+    });
+
+    // Hook events on buttons and anchors
+    function buildClickEvents() {
+      $("[data-pdsa-action]").on("click", function (e) {
+        e.preventDefault();
+
+        $("#EventCommand").val(
+          $(this).data("pdsa-action"));
+
+        $("#EventArgument").val(
+          $(this).attr("data-pdsa-val"));
+
+        $("form").submit();
+      });
+    }
+  </script>
+}
