@@ -17,9 +17,11 @@
             };
         }
 
+        // props
         vm.products = [];
         vm.searchCategories = [];
         vm.searchInput = emptySearchInput();
+        // events
         vm.searchImmediate = searchImmediate;
         vm.resetSearch = clearSearchInput;
 
