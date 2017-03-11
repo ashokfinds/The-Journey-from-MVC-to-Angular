@@ -1,0 +1,152 @@
+﻿@model TrainingApp.ViewModels.ProductsViewModel
+
+@{
+    ViewBag.Title = "Traing App";
+}
+
+@using (Html.BeginForm()) {
+    <!-- BEGIN HIDDEN FIELDS AREA -->  
+    @Html.HiddenFor(m => m.EventCommand)
+    @Html.HiddenFor(m => m.EventArgument)
+    @Html.HiddenFor(m => m.Mode)    
+    <!-- END HIDDEN FIELDS AREA -->
+
+    <!-- BEGIN SEARCH AREA -->
+    if(Model.IsSearchAreaVisible) {
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">Search for products</h1>
+            </div>        
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SearchProduct.Name, "Product Name")
+                    @Html.TextBoxFor(m => m.SearchProduct.Name, "", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button id="btnSearch" class="btn btn-sm btn-primary" data-pdsa-action="search">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                </button>
+                <button id="btnSearch" class="btn btn-sm btn-primary" data-pdsa-action="resetSearch">
+                    <span class="glyphicon glyphicon-share-alt"></span> Reset
+                </button>
+                <button id="btnAdd" class="btn btn-sm btn-success" data-pdsa-action="add">
+                    <span class="glyphicon glyphicon-plus-sign"></span> Add
+                </button> 
+            </div>
+        </div>
+    }
+    <!-- END SEARCH AREA -->
+
+    <!-- BEGIN DETAIL AREA -->    
+    if(Model.IsDetailAreaVisible) {
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">Add product</h1>
+            </div>
+            <div class="panel-body">
+                <!-- BEGIN MESSAGE AREA -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if(!Model.IsEntityValid) {
+                            <div class="alert alert-danger alert-dismissable" role="alert">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">
+                                        &times;
+                                    </span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                @Html.ValidationSummary(false)
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- END MESSAGE AREA -->
+                @Html.HiddenFor(m => m.EntityProduct.Id)
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EntityProduct.Name, "Product Name")
+                    @Html.TextBoxFor(m => m.EntityProduct.Name, "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EntityProduct.IntroducedAt, "Introduction date")
+                    @Html.TextBoxFor(m => m.EntityProduct.IntroducedAt, "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EntityProduct.Url, "URL")
+                    @Html.TextBoxFor(m => m.EntityProduct.Url, "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EntityProduct.Price, "Price")
+                    @Html.TextBoxFor(m => m.EntityProduct.Price, "", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="save">
+                    <span class="glyphicon glyphicon-floppy-save"></span> Save
+                </button>
+                <button id="btnCancel" class="btn btn-sm btn-primary" data-pdsa-action="cancel" formnovalidate="formnovalidate">
+                    <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+                </button>
+            </div>
+        </div>
+    }
+    <!-- END DETAIL AREA -->
+
+    <!-- BEGIN LIST AREA -->
+    if(Model.IsListAreaVisible) {
+        <div class="table-responsive">
+            <table class="table table-condensed table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Introduction Date</th>
+                        <th>Url</th>
+                        <th>Price</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products) {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.IntroducedAt</td>
+                            <td><a href="@product.Url">@product.Url</a></td>
+                            <td>@product.Price.ToString("c")</td>
+                            <td class="pdsa-action-button-column">
+                                <a href="#" class="btn btn-sm btn-default" 
+                                   data-pdsa-action="edit" data-pdsa-val="@product.Id"
+                                >
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-danger" 
+                                   data-pdsa-action="delete" data-pdsa-val="@product.Id"
+                                >
+                                    <span class="glyphicon glyphicon-remove-sign"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <!-- END LIST AREA -->
+}
+
+@section scripts {
+    <script>
+        (function () {
+            $(document).ready(function () {
+                $('[data-pdsa-action]').on("click", function (e) {
+                    e.preventDefault();
+                    $('#EventCommand').val($(this).attr('data-pdsa-action'));
+                    $('#EventArgument').val($(this).attr('data-pdsa-val'));                    
+                    $('form').submit();
+                });
+            });
+        })();
+    </script>
+}
