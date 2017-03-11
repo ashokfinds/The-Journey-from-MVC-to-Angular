@@ -134,7 +134,28 @@
 
         function handleException(error) {
             vm.uiState.isValid = false;
-            alert(error.data.ExceptionMessage);
+            var message = {
+                property: 'Error',
+                message: ''
+            };
+
+            vm.uiState.messages = [];
+
+            switch (error.status) {
+                case 400: // bad request
+                case 404: // not found
+                    message.message = 'The product you were request could not be found.';
+                    vm.uiState.messages.push(message);
+                    break;
+                case 500: // internal server error
+                    message.message = 'Something went wrong on the server...: "' + error.data.ExceptionMessage + '".';
+                    vm.uiState.messages.push(message);
+                    break;
+                default: // default behaviour when error
+                    message.message = 'Status: "' + error.status + '" - Error Message: "' + error.statusText + '".'
+                    vm.uiState.messages.push(message);
+                    break;
+            };
         }
     }
 })();

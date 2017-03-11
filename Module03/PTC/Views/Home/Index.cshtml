@@ -21,7 +21,11 @@
                         </span>
                         <span class="sr-only">Close</span>
                     </button>
-                    @Html.ValidationSummary(false)
+                    <ul>
+                        <li ng-repeat="message in vm.uiState.messages">
+                            {{message.message}}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
