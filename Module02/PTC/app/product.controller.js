@@ -22,6 +22,7 @@
         vm.searchCategories = [];
         vm.searchInput = emptySearchInput();
         // events
+        vm.search = search;
         vm.searchImmediate = searchImmediate;
         vm.resetSearch = clearSearchInput;
 
@@ -48,6 +49,23 @@
             );
         }
 
+        function search() {
+            var searchEntity = {
+                CategoryId:
+                    vm.searchInput.selectedCategory.CategoryId,
+                ProductName:
+                    vm.searchInput.productName
+            };
+
+            dataService.post("/api/Product/Search", searchEntity)
+                .then(function (result) {
+                    vm.products = result.data;
+                    var x = 0;
+                }, function (error) {
+                    handleException(error);
+                }
+            );
+        }
         function searchImmediate(item) {
             var matchesCategory = vm.searchInput.selectedCategory.CategoryId === 0
                 ? true

@@ -7,11 +7,11 @@ using System.Web.Http;
 
 namespace PTC.Controllers_Apî
 {
+    [RoutePrefix("api/Product")]
     public class ProductController : ApiController
-    {
-        // GET api/<controller>
-        public IHttpActionResult Get()
-        {
+    {        
+        [HttpGet]        
+        public IHttpActionResult Get() {
             IHttpActionResult ret = null;
             var vm = new PTCViewModel();
 
@@ -23,6 +23,23 @@ namespace PTC.Controllers_Apî
             }
 
             return ret;
-        }        
+        }
+     
+        [HttpPost]
+        [Route("Search")]
+        public IHttpActionResult Search(ProductSearch searchEntity) {
+            IHttpActionResult ret = null;
+            var vm = new PTCViewModel();
+
+            vm.SearchEntity = searchEntity;
+            vm.Search();
+            if (vm.Products.Count > 0) {
+                ret = Ok(vm.Products);
+            } else {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
     }
 }
