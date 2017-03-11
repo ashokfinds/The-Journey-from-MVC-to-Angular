@@ -115,9 +115,18 @@
                 }, function (error) {
                     handleException(error);
                 }
-                );
+            );
         }
         function productAdd() {
+            dataService.post("/api/Product/", vm.product)
+                .then(function (result) {
+                    vm.product = result.data;
+                    vm.products.push(vm.product);
+                    setUiState(pageMode.LIST);
+                }, function (error) {
+                    handleException(error);
+                }
+                );
         }
         function productUpdate() {
             dataService.put("/api/Product/" + vm.product.ProductId, vm.product)

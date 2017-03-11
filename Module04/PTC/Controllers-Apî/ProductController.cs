@@ -44,6 +44,25 @@ namespace PTC.Controllers_Apî
             return ret;
         }
 
+        [HttpPost]        
+        public IHttpActionResult Post(Product product)
+        {
+            IHttpActionResult ret = null;
+            var vm = new PTCViewModel();
+
+            vm.Entity = product;
+            vm.PageMode = PageConstants.ADD;
+            vm.Save();
+
+            if (vm.IsValid) {
+                ret = Created(Request.RequestUri + product.ProductId.ToString(), product);
+            } else {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
+
         [HttpPut]
         [Route("{id}")]
         public IHttpActionResult Put(int id, Product product) {
