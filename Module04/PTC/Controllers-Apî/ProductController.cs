@@ -25,7 +25,24 @@ namespace PTC.Controllers_Apî
 
             return ret;
         }
-     
+
+        [HttpGet]
+        [Route("{id}")]
+        public IHttpActionResult Get(int id)
+        {
+            IHttpActionResult ret = null;
+            var vm = new PTCViewModel();
+            
+            var product = vm.Get(id);
+            if (product != null) {
+                ret = Ok(product);
+            } else {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
+
         [HttpPost]
         [Route("Search")]
         public IHttpActionResult Search(ProductSearch searchEntity) {

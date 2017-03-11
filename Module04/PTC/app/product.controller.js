@@ -72,6 +72,8 @@
             setUiState(pageMode.ADD);
         }
         function editClick(id) {
+            categoriesList();
+            productGet(id);
             setUiState(pageMode.EDIT);
         }
         function deleteClick(id) {
@@ -94,6 +96,19 @@
                     handleException(error);
                 }
             );            
+        }
+        function productGet(id) {
+            dataService.get("/api/Product/" + id)
+                .then(function (result) {
+                    vm.product = result.data;
+                    if (vm.product.IntroductionDate != null) {
+                        vm.product.IntroductionDate = new Date(vm.product.IntroductionDate)
+                            .toLocaleDateString();
+                    }
+                }, function (error) {
+                    handleException(error);
+                }
+                );
         }
         function categoriesList() {
             dataService.get("/api/Category/")
