@@ -59,11 +59,10 @@
                     <i class="glyphicon glyphicon-share-alt"></i>
                     &nbsp;Reset
                 </a>
-                <button formnovalidate="formnovalidate"
-                        class="btn btn-sm btn-success">
+                <a class="btn btn-sm btn-success" ng-click="vm.addClick()">
                     <i class="glyphicon glyphicon-plus"></i>
                     &nbsp;Add
-                </button>
+                </a>
             </div>
         </div>
         <!-- ** END SEARCH AREA ** -->        
@@ -102,17 +101,14 @@
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-sm-12">
-                        <button class="btn btn-sm btn-primary"
-                                data-pdsa-action="save">
+                        <a class="btn btn-sm btn-primary" ng-click="vm.saveClick()">
                             <i class="glyphicon glyphicon-floppy-disk"></i>
                             &nbsp;Save
-                        </button>
-                        <button class="btn btn-sm btn-primary"
-                                formnovalidate="formnovalidate"
-                                data-pdsa-action="cancel">
+                        </a>
+                        <a class="btn btn-sm btn-primary" ng-click="vm.cancelClick()" >
                             <i class="glyphicon glyphicon-remove-circle"></i>
                             &nbsp;Cancel
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -142,6 +138,7 @@
                     <tr ng-repeat="product in vm.products | filter: vm.searchImmediate">
                         <td class="pdsa-action-button-column">
                             <a href="#"
+                               ng-click="vm.editClick(product.ProductId)"
                                class="btn btn-default btn-sm">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a>
@@ -152,7 +149,7 @@
                         <td>{{product.Price | currency: "€"}}</td>
                         <td class="pdsa-action-button-column">
                             <a href="#"
-                               onclick="return confirm('Delete this Product?');"
+                               ng-click="vm.deleteClick(product.ProductId)"                               
                                class="btn btn-default btn-sm">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
@@ -169,25 +166,4 @@
 @section scripts {  
   <script src="~/app/app.module.js"></script>
   <script src="~/app/product.controller.js"></script>
-  <script>
-    $(document).ready(function () {
-      // Hook events on buttons and anchors
-      buildClickEvents();
-    });
-
-    // Hook events on buttons and anchors
-    function buildClickEvents() {
-      $("[data-pdsa-action]").on("click", function (e) {
-        e.preventDefault();
-
-        $("#EventCommand").val(
-          $(this).data("pdsa-action"));
-
-        $("#EventArgument").val(
-          $(this).attr("data-pdsa-val"));
-
-        $("form").submit();
-      });
-    }
-  </script>
 }
