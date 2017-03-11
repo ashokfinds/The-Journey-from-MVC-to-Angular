@@ -31,11 +31,26 @@
                 productName: ''
             };
         };
+        var emptyProduct = function () {
+            return {
+                ProductId: 0,
+                Category: {
+                    CategoryId: 1,
+                    CategoryName: ''
+                },
+                ProductName: '',
+                IntroductionDate: new Date().toLocaleDateString(),
+                Price: 0,
+                Url: 'http://'
+            };
+        };
         
 
         // props
         vm.uiState = initialUiState();
+        vm.product = {};        
         vm.products = [];
+        vm.categories = [];
         vm.searchCategories = [];
         vm.searchInput = emptySearchInput();
         // events
@@ -52,6 +67,8 @@
         searchCategoriesList();
 
         function addClick() {
+            categoriesList();
+            vm.product = emptyProduct();
             setUiState(pageMode.ADD);
         }
         function editClick(id) {
@@ -77,6 +94,15 @@
                     handleException(error);
                 }
             );            
+        }
+        function categoriesList() {
+            dataService.get("/api/Category/")
+                .then(function (result) {
+                    vm.categories = result.data;
+                }, function (error) {
+                    handleException(error);
+                }
+                );
         }
         function searchCategoriesList() {
             dataService.get("/api/Category/GetSearchCategories")
