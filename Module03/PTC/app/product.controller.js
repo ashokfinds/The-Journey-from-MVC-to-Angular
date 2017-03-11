@@ -4,9 +4,24 @@
     angular.module('app')
         .controller('ProductController', ProductController);
 
-    function ProductController($http) {
+    function ProductController($http) {        
         var vm = this;
         var dataService = $http;
+        var pageMode = {
+            LIST: 'List',
+            EDIT: 'Edit',
+            ADD: 'Add'
+        };
+        var initialUiState = function () {
+            return {
+                mode: pageMode.LIST,
+                isDetailAreaVisible: false,
+                isListAreaVisible: true,
+                isSearchAreaVisible: true,
+                isValid: true,
+                messages: []
+            };
+        };
         var emptySearchInput = function () {
             return {
                 selectedCategory: {
@@ -15,9 +30,11 @@
                 },
                 productName: ''
             };
-        }
+        };
+        
 
         // props
+        vm.uiState = initialUiState();
         vm.products = [];
         vm.searchCategories = [];
         vm.searchInput = emptySearchInput();
@@ -25,23 +42,45 @@
         vm.search = search;
         vm.searchImmediate = searchImmediate;
         vm.resetSearch = clearSearchInput;
+        vm.addClick = addClick;
+        vm.editClick = editClick;
+        vm.deleteClick = deleteClick;
+        vm.saveClick = saveClick;
+        vm.cancelClick = cancelClick;
 
         clearSearchInput();
         searchCategoriesList();
 
+        function addClick() {
+            setUiState(pageMode.ADD);
+        }
+        function editClick(id) {
+            setUiState(pageMode.EDIT);
+        }
+        function deleteClick(id) {
+            if (confirm("Delete this Product?")) {
+            }
+        }
+        function saveClick() {
+            setUiState(pageMode.LIST);
+        }
+        function cancelClick() {
+            setUiState(pageMode.LIST);
+        }
+
         function productList() {
             dataService.get("/api/Product")
-                .then(function (result) {
-                    vm.products = result.data;       
-                    var x = 0;
+                .then(function (result) {                    
+                    vm.products = result.data;
+                    setUiState(pageMode.LIST);
                 }, function (error) {
                     handleException(error);
                 }
-            );
+            );            
         }
         function searchCategoriesList() {
             dataService.get("/api/Category/GetSearchCategories")
-                .then(function (result) {
+                .then(function (result) {                    
                     vm.searchCategories = result.data;
                 }, function (error) {
                     handleException(error);
@@ -60,11 +99,11 @@
             dataService.post("/api/Product/Search", searchEntity)
                 .then(function (result) {
                     vm.products = result.data;
-                    var x = 0;
+                    setUiState(pageMode.LIST);
                 }, function (error) {
                     handleException(error);
                 }
-            );
+            );            
         }
         function searchImmediate(item) {
             var matchesCategory = vm.searchInput.selectedCategory.CategoryId === 0
@@ -82,7 +121,19 @@
             productList();
         }
 
+        function setUiState(state) {
+            vm.uiState.mode = state;
+
+            vm.uiState.isDetailAreaVisible =
+                state === pageMode.ADD || state === pageMode.EDIT;
+            vm.uiState.isListAreaVisible =
+                state === pageMode.LIST;
+            vm.isSearchAreaVisible =
+                state === pageMode.LIST;
+        }
+
         function handleException(error) {
+            vm.uiState.isValid = false;
             alert(error.data.ExceptionMessage);
         }
     }

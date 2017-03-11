@@ -6,18 +6,10 @@
 
 @using (Html.BeginForm()) {
     <!-- ** BEGIN ng-app **-->
-    <div ng-app="app" 
-         ng-controller="ProductController as vm">        
-        <!-- ** BEGIN HIDDEN FIELDS AREA ** -->
-        @Html.HiddenFor(m => m.EventCommand)
-        @Html.HiddenFor(m => m.EventArgument)
-        @Html.HiddenFor(m => m.PageMode)
-        @Html.HiddenFor(m => m.Entity.ProductId)
-        <!-- ** END HIDDEN FIELDS AREA ** -->
-        @if (!Model.IsValid)
-        {
+    <div ng-app="app" ng-controller="ProductController as vm">        
+        
         <!-- ** BEGIN MESSAGE AREA ** -->
-        <div class="row">
+        <div class="row" ng-hide="vm.uiState.isValid">
             <div class="col-xs-12">
                 <div class="alert alert-danger
                     alert-dismissable"
@@ -33,12 +25,10 @@
                 </div>
             </div>
         </div>
-        <!-- ** END MESSAGE AREA ** -->
-        }
-
-        @if (Model.IsSearchAreaVisible) {
+        <!-- ** END MESSAGE AREA ** -->        
+        
         <!-- ** BEGIN SEARCH AREA ** -->
-        <div class="panel panel-primary">
+        <div class="panel panel-primary" ng-show="vm.uiState.isSearchAreaVisible">
             <div class="panel-heading">
                 <h1 class="panel-title">Search for Products</h1>
             </div>
@@ -76,12 +66,10 @@
                 </button>
             </div>
         </div>
-        <!-- ** END SEARCH AREA ** -->
-        }
-
-        @if (Model.IsDetailAreaVisible) {
+        <!-- ** END SEARCH AREA ** -->        
+        
         <!-- ** BEGIN DETAIL AREA ** -->
-        <div class="panel panel-primary">
+        <div class="panel panel-primary" ng-show="vm.uiState.isDetailAreaVisible">
             <div class="panel-heading">
                 <h1 class="panel-title">
                     Product Information
@@ -129,12 +117,10 @@
                 </div>
             </div>
         </div>
-        <!-- ** END DETAIL AREA ** -->
-        }
-
-        @if (Model.IsListAreaVisible) {
+        <!-- ** END DETAIL AREA ** -->        
+        
         <!-- ** BEGIN LIST AREA ** -->
-        <div class="table-responsive">
+        <div class="table-responsive" ng-show="vm.uiState.isListAreaVisible">
             <table id="productTable"
                    class="table table-condensed table-bordered table-striped table-hover">
                 <thead>
@@ -175,8 +161,7 @@
                 </tbody>
             </table>
         </div>
-        <!-- ** END LIST AREA ** -->
-        }
+        <!-- ** END LIST AREA ** -->        
     </div>
     <!-- ** END ng-app **-->
 }
