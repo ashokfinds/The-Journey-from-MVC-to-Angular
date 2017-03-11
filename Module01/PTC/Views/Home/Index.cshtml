@@ -155,31 +155,26 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    @foreach (var item in Model.Products) {
-                        <tr>
-                            <td class="pdsa-action-button-column">
-                                <a href="#" data-pdsa-action="edit"
-                                   data-pdsa-val="@item.ProductId"
-                                   class="btn btn-default btn-sm">
-                                    <i class="glyphicon glyphicon-edit"></i>
-                                </a>
-                            </td>
-                            <td>@item.ProductName</td>
-                            <td>@item.IntroductionDate</td>
-                            <td>@item.Url</td>
-                            <td>@item.Price.Value.ToString("c")</td>
-                            <td class="pdsa-action-button-column">
-                                <a href="#" data-pdsa-action="delete"
-                                   data-pdsa-val="@item.ProductId"
-                                   onclick="return confirm('Delete this Product?');"
-                                   class="btn btn-default btn-sm">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
-                            </td>
-
-                        </tr>
-                    }
+                <tbody>                    
+                    <tr ng-repeat="product in vm.products">
+                        <td class="pdsa-action-button-column">
+                            <a href="#"
+                               class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        </td>
+                        <td>{{product.ProductName}}</td>
+                        <td>{{product.IntroductionDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{product.Url}}</td>
+                        <td>{{product.Price | currency: "€"}}</td>
+                        <td class="pdsa-action-button-column">
+                            <a href="#"
+                               onclick="return confirm('Delete this Product?');"
+                               class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
