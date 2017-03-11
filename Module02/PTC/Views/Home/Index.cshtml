@@ -45,13 +45,13 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    @Html.LabelFor(m => m.SearchEntity.CategoryId,
-                         "Select a Product Category")
-                    @Html.DropDownListFor(m => m.SearchEntity.CategoryId,
-                                new SelectList(Model.SearchCategories,
-                                                "CategoryId",
-                                                "CategoryName"),
-                               new { @class = "form-control" })
+                    <label for="searchCategoryId">Select a Product Category</label>
+                    <select id="searchCategoryId" class="form-control"
+                            ng-model="vm.searchInput.selectedCategory"
+                            ng-options="item.CategoryName
+                                        for item in vm.searchCategories
+                                        track by item.CategoryId">
+                    </select>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.SearchEntity.ProductName, "Product Name")

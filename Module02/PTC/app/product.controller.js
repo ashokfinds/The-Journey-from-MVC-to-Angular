@@ -9,13 +9,31 @@
         var dataService = $http;
 
         vm.products = [];
+        vm.searchCategories = [];
+        vm.searchInput = {
+            selectedCategory: {
+                CategoryId: 0,
+                CategoryName: ''
+            },
+            productName: ''
+        };
 
         productList();
+        searchCategoryList();
 
         function productList() {
             dataService.get("/api/Product")
                 .then(function (result) {
                     vm.products = result.data;                    
+                }, function (error) {
+                    handleException(error);
+                }
+            );
+        }
+        function searchCategoryList() {
+            dataService.get("/api/Category/GetSearchCategories")
+                .then(function (result) {
+                    vm.searchCategories = result.data;
                 }, function (error) {
                     handleException(error);
                 }
