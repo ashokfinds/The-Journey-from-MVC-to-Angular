@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace PTC.Controllers
@@ -8,7 +9,7 @@ namespace PTC.Controllers
     public ActionResult Index()
     {
       PTCViewModel vm = new PTCViewModel();
-
+            
       vm.HandleRequest();
 
       return View(vm);

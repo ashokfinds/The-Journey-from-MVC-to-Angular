@@ -15,6 +15,7 @@ namespace PTC.Controllers_Apî
             IHttpActionResult ret = null;
             var vm = new PTCViewModel();
 
+            //throw new ApplicationException("Error in the Get() method");
             vm.Get();
             if(vm.Products.Count > 0) {
                 ret = Ok(vm.Products);
