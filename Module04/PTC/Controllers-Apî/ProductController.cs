@@ -82,6 +82,25 @@ namespace PTC.Controllers_Apî
             return ret;
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            IHttpActionResult ret = null;
+            var vm = new PTCViewModel();
+
+            vm.Entity = vm.Get(id);            
+
+            if (vm.Entity.ProductId > 0) {
+                vm.Delete(id);
+                ret = Ok();
+            } else {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
+
         [HttpPost]
         [Route("Search")]
         public IHttpActionResult Search(ProductSearch searchEntity) {
