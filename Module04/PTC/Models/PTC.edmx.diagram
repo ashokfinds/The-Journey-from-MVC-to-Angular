@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="928aa2aa716049ab9c67b04f533556b0" Name="Diagram1">
+        <EntityTypeShape EntityType="PTCModel.Category" PointX="0.75" PointY="2.375" Width="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PTCModel.Product" PointX="4.375" PointY="1.375" Width="1.5" IsExpanded="true" />
+        <AssociationConnector ManuallyRouted="false" Association="PTCModel.FK_Product_Category" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

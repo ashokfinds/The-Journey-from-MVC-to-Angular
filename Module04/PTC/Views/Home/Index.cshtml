@@ -1,0 +1,173 @@
+﻿@model PTCViewModel
+
+@{
+  ViewBag.Title = "Paul's Training Company";
+}
+
+@using (Html.BeginForm()) {
+    <!-- ** BEGIN ng-app **-->
+    <div ng-app="app" ng-controller="ProductController as vm">        
+        
+        <!-- ** BEGIN MESSAGE AREA ** -->
+        <div class="row" ng-hide="vm.uiState.isValid">
+            <div class="col-xs-12">
+                <div class="alert alert-danger
+                    alert-dismissable"
+                     role="alert">
+                    <button type="button" class="close"
+                            data-dismiss="alert">
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <ul>
+                        <li ng-repeat="message in vm.uiState.messages">
+                            {{message.message}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- ** END MESSAGE AREA ** -->        
+        
+        <!-- ** BEGIN SEARCH AREA ** -->
+        <div class="panel panel-primary" ng-show="vm.uiState.isSearchAreaVisible">
+            <div class="panel-heading">
+                <h1 class="panel-title">Search for Products</h1>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="searchCategoryId">Select a Product Category</label>
+                    <select id="searchCategoryId" class="form-control"
+                            ng-model="vm.searchInput.selectedCategory"
+                            ng-options="item.CategoryName
+                                        for item in vm.searchCategories
+                                        track by item.CategoryId">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="searchProductName">Product Name</label>
+                    <input id="searchProductName" type="text" class="form-control"
+                           ng-model="vm.searchInput.productName" />                    
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a class="btn btn-sm btn-primary"
+                   ng-click="vm.search()">
+                    <i class="glyphicon glyphicon-search"></i>
+                    &nbsp;Search
+                </a>
+                <a class="btn btn-sm btn-primary"
+                        ng-click="vm.resetSearch()">
+                    <i class="glyphicon glyphicon-share-alt"></i>
+                    &nbsp;Reset
+                </a>
+                <a class="btn btn-sm btn-success" ng-click="vm.addClick()">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    &nbsp;Add
+                </a>
+            </div>
+        </div>
+        <!-- ** END SEARCH AREA ** -->        
+        
+        <!-- ** BEGIN DETAIL AREA ** -->
+        <div class="panel panel-primary" ng-show="vm.uiState.isDetailAreaVisible">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    Product Information
+                </h1>
+            </div>
+            <div class="panel-body">
+                <!-- ** BEGIN INPUT AREA -->
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.Category.CategoryId, "Product Category")
+                    @Html.DropDownListFor(m => m.Entity.Category.CategoryId, new SelectList(Model.Categories, "CategoryId", "CategoryName"), new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.ProductName, "Product Name")
+                    @Html.TextBoxFor(m => m.Entity.ProductName, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.IntroductionDate, "Introduction Date")
+                    @Html.TextBoxFor(m => m.Entity.IntroductionDate, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.Url, "Url")
+                    @Html.TextBoxFor(m => m.Entity.Url, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Entity.Price, "Price")
+                    @Html.TextBoxFor(m => m.Entity.Price, new { @class = "form-control" })
+                </div>
+                <!-- ** END INPUT AREA -->
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-sm btn-primary" ng-click="vm.saveClick()">
+                            <i class="glyphicon glyphicon-floppy-disk"></i>
+                            &nbsp;Save
+                        </a>
+                        <a class="btn btn-sm btn-primary" ng-click="vm.cancelClick()" >
+                            <i class="glyphicon glyphicon-remove-circle"></i>
+                            &nbsp;Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ** END DETAIL AREA ** -->        
+        
+        <!-- ** BEGIN LIST AREA ** -->
+        <div class="table-responsive" ng-show="vm.uiState.isListAreaVisible">
+            <table id="productTable"
+                   class="table table-condensed table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="pdsa-action-button-column">
+                            Edit
+                        </th>
+                        <th>Product Name</th>
+                        <th>Introduction Date</th>
+                        <th>Url</th>
+                        <th>Price</th>
+                        <th class="pdsa-action-button-column">
+                            Delete
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>                    
+                    <tr ng-repeat="product in vm.products | filter: vm.searchImmediate">
+                        <td class="pdsa-action-button-column">
+                            <a href="#"
+                               ng-click="vm.editClick(product.ProductId)"
+                               class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        </td>
+                        <td>{{product.ProductName}}</td>
+                        <td>{{product.IntroductionDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{product.Url}}</td>
+                        <td>{{product.Price | currency: "€"}}</td>
+                        <td class="pdsa-action-button-column">
+                            <a href="#"
+                               ng-click="vm.deleteClick(product.ProductId)"                               
+                               class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ** END LIST AREA ** -->        
+    </div>
+    <!-- ** END ng-app **-->
+}
+
+@section scripts {  
+  <script src="~/app/app.module.js"></script>
+  <script src="~/app/product.controller.js"></script>
+}
