@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PTC.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -35,6 +36,25 @@ namespace PTC.Controllers_Apî
             
             var product = vm.Get(id);
             if (product != null) {
+                ret = Ok(product);
+            } else {
+                ret = NotFound();
+            }
+
+            return ret;
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IHttpActionResult Put(int id, Product product) {
+            IHttpActionResult ret = null;
+            var vm = new PTCViewModel();
+
+            vm.Entity = product;
+            vm.PageMode = PageConstants.EDIT;
+            vm.Save();
+
+            if (vm.IsValid) {
                 ret = Ok(product);
             } else {
                 ret = NotFound();

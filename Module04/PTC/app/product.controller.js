@@ -81,7 +81,14 @@
             }
         }
         function saveClick() {
-            setUiState(pageMode.LIST);
+            if (productValidate()) {
+                if (vm.uiState.mode === pageMode.ADD) {
+                    productAdd();
+                }
+                if (vm.uiState.mode === pageMode.EDIT) {
+                    productUpdate();
+                }                
+            }
         }
         function cancelClick() {
             setUiState(pageMode.LIST);
@@ -109,6 +116,33 @@
                     handleException(error);
                 }
                 );
+        }
+        function productAdd() {
+        }
+        function productUpdate() {
+            dataService.put("/api/Product/" + vm.product.ProductId, vm.product)
+                .then(function (result) {
+                    vm.product = result.data;
+
+                    var index = vm.products.map(function (p) {
+                        return p.ProductId;
+                    }).indexOf(vm.product.ProductId);
+                    vm.products[index] = vm.product;
+
+                    setUiState(pageMode.LIST);
+                }, function (error) {
+                    handleException(error);
+                }
+            );
+        }
+        function productValidate() {
+            var ret = true;
+
+            // IE11 workaround
+            vm.product.IntroductionDate =
+                vm.product.IntroductionDate.replace(/\u200E/g, '');
+
+            return ret;
         }
         function categoriesList() {
             dataService.get("/api/Category/")
