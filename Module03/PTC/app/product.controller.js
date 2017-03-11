@@ -122,13 +122,13 @@
         }
 
         function setUiState(state) {
-            vm.uiState.mode = state;
+            vm.uiState.mode = state;            
 
             vm.uiState.isDetailAreaVisible =
                 state === pageMode.ADD || state === pageMode.EDIT;
             vm.uiState.isListAreaVisible =
                 state === pageMode.LIST;
-            vm.isSearchAreaVisible =
+            vm.uiState.isSearchAreaVisible =
                 state === pageMode.LIST;
         }
 
