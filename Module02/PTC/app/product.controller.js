@@ -7,24 +7,30 @@
     function ProductController($http) {
         var vm = this;
         var dataService = $http;
+        var emptySearchInput = function () {
+            return {
+                selectedCategory: {
+                    CategoryId: 0,
+                    CategoryName: ''
+                },
+                productName: ''
+            };
+        }
 
         vm.products = [];
         vm.searchCategories = [];
-        vm.searchInput = {
-            selectedCategory: {
-                CategoryId: 0,
-                CategoryName: ''
-            },
-            productName: ''
-        };
+        vm.searchInput = emptySearchInput();
+        vm.searchImmediate = searchImmediate;
+        vm.resetSearch = clearSearchInput;
 
-        productList();
+        clearSearchInput();
         searchCategoriesList();
 
         function productList() {
             dataService.get("/api/Product")
                 .then(function (result) {
-                    vm.products = result.data;                    
+                    vm.products = result.data;       
+                    var x = 0;
                 }, function (error) {
                     handleException(error);
                 }
@@ -38,6 +44,22 @@
                     handleException(error);
                 }
             );
+        }
+
+        function searchImmediate(item) {
+            var matchesCategory = vm.searchInput.selectedCategory.CategoryId === 0
+                ? true
+                : vm.searchInput.selectedCategory.CategoryId === item.Category.CategoryId;
+            var matchesProductName = vm.searchInput.productName.lenght === 0
+                ? true
+                : (item.ProductName.toLowerCase().indexOf(vm.searchInput.productName.toLowerCase())) >= 0;
+
+            return matchesCategory && matchesProductName;
+        }
+
+        function clearSearchInput() {
+            vm.searchInput = emptySearchInput();
+            productList();
         }
 
         function handleException(error) {

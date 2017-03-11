@@ -7,8 +7,7 @@
 @using (Html.BeginForm()) {
     <!-- ** BEGIN ng-app **-->
     <div ng-app="app" 
-         ng-controller="ProductController as vm">
-        <span>{{vm.product.productName}}</span>
+         ng-controller="ProductController as vm">        
         <!-- ** BEGIN HIDDEN FIELDS AREA ** -->
         @Html.HiddenFor(m => m.EventCommand)
         @Html.HiddenFor(m => m.EventArgument)
@@ -54,26 +53,23 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.SearchEntity.ProductName, "Product Name")
-                    @Html.TextBoxFor(m => m.SearchEntity.ProductName, new { @class = "form-control" })
+                    <label for="searchProductName">Product Name</label>
+                    <input id="searchProductName" type="text" class="form-control"
+                           ng-model="vm.searchInput.productName" />                    
                 </div>
             </div>
             <div class="panel-footer">
-                <button formnovalidate="formnovalidate"
-                        class="btn btn-sm btn-primary"
-                        data-pdsa-action="search">
+                <a class="btn btn-sm btn-primary">
                     <i class="glyphicon glyphicon-search"></i>
                     &nbsp;Search
-                </button>
-                <button formnovalidate="formnovalidate"
-                        class="btn btn-sm btn-primary"
-                        data-pdsa-action="resetsearch">
+                </a>
+                <a class="btn btn-sm btn-primary"
+                        ng-click="vm.resetSearch()">
                     <i class="glyphicon glyphicon-share-alt"></i>
                     &nbsp;Reset
-                </button>
+                </a>
                 <button formnovalidate="formnovalidate"
-                        class="btn btn-sm btn-success"
-                        data-pdsa-action="add">
+                        class="btn btn-sm btn-success">
                     <i class="glyphicon glyphicon-plus"></i>
                     &nbsp;Add
                 </button>
@@ -156,7 +152,7 @@
                 </thead>
 
                 <tbody>                    
-                    <tr ng-repeat="product in vm.products">
+                    <tr ng-repeat="product in vm.products | filter: vm.searchImmediate">
                         <td class="pdsa-action-button-column">
                             <a href="#"
                                class="btn btn-default btn-sm">

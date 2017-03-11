@@ -56,6 +56,7 @@ namespace PTC
     #region HandleRequest Method
     public void HandleRequest() {      
       LoadCategories();
+      EventCommand = EventCommand ?? String.Empty;
 
       switch (EventCommand.ToLower()) {
         case "":
