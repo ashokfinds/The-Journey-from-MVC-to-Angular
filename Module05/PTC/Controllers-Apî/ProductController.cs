@@ -1,10 +1,7 @@
 ﻿using PTC.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.ModelBinding;
 
 namespace PTC.Controllers_Apî
 {
@@ -56,6 +53,8 @@ namespace PTC.Controllers_Apî
 
             if (vm.IsValid) {
                 ret = Created(Request.RequestUri + product.ProductId.ToString(), product);
+            } else if (vm.Messages.Count > 0) {
+                ret = BadRequest(ConvertToModelState(vm.Messages));
             } else {
                 ret = NotFound();
             }
@@ -75,6 +74,8 @@ namespace PTC.Controllers_Apî
 
             if (vm.IsValid) {
                 ret = Ok(product);
+            } else if (vm.Messages.Count > 0) {
+                ret = BadRequest(ConvertToModelState(vm.Messages));
             } else {
                 ret = NotFound();
             }
@@ -113,6 +114,17 @@ namespace PTC.Controllers_Apî
                 ret = Ok(vm.Products);
             } else {
                 ret = NotFound();
+            }
+
+            return ret;
+        }
+        private ModelStateDictionary ConvertToModelState(System.Web.Mvc.ModelStateDictionary modelStateDictionary) {
+            var ret = new ModelStateDictionary();
+
+            foreach(var list in modelStateDictionary.ToList()) {
+                for(int i = 0; i < list.Value.Errors.Count; i++) {
+                    ret.AddModelError(list.Key, list.Value.Errors[i].ErrorMessage);
+                }
             }
 
             return ret;

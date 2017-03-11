@@ -271,6 +271,15 @@
 
             switch (error.status) {
                 case 400: // bad request
+                    var errors = error.data.ModelState;
+
+                    for (var key in errors) {
+                        for (var i = 0; i < errors[key].length; i++) {
+                            addValidationMessage(key, errors[key][i]);
+                        }
+                    }
+
+                    break;
                 case 404: // not found
                     message.message = 'The product you were request could not be found.';
                     vm.uiState.messages.push(message);
