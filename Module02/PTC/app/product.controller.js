@@ -50,7 +50,7 @@
             var matchesCategory = vm.searchInput.selectedCategory.CategoryId === 0
                 ? true
                 : vm.searchInput.selectedCategory.CategoryId === item.Category.CategoryId;
-            var matchesProductName = vm.searchInput.productName.lenght === 0
+            var matchesProductName = vm.searchInput.productName.length === 0
                 ? true
                 : (item.ProductName.toLowerCase().indexOf(vm.searchInput.productName.toLowerCase())) >= 0;
 
